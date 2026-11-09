@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pengajuan Cuti / Izin — SIMPONI</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="topbar">
+    <div class="brand-wrapper">
+      <span class="brand-title">SIMPONI</span>
+      <span class="brand-subtitle">Employee Attendance System</span>
+      <span class="brand-author">Created by Deddy Harisman</span>
+    </div>
+    <div class="user-badge">
+      <div>
+        <div id="header-user-name" class="user-name">Memuat...</div>
+        <div id="header-user-role" class="user-role">Karyawan</div>
+      </div>
+      <button class="btn btn-secondary btn-sm" onclick="API.logout()">Keluar</button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+    <!-- Form Pengajuan Card -->
+    <div class="card">
+      <div class="card-title">Formulir Pengajuan Cuti / Izin</div>
+
+      <form id="leave-form">
+        <div class="form-group">
+          <label class="form-label" for="leave-type">Jenis Cuti / Izin</label>
+          <select id="leave-type" class="form-control" required>
+            <option value="ANNUAL">Cuti Tahunan (Annual Leave)</option>
+            <option value="SICK">Izin Sakit (Sick Leave)</option>
+            <option value="EMERGENCY">Izin Keperluan Mendesak (Emergency)</option>
+            <option value="UNPAID">Cuti Tanpa Upah (Unpaid Leave)</option>
+          </select>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div class="form-group">
+            <label class="form-label" for="start-date">Tanggal Mulai</label>
+            <input type="date" id="start-date" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="end-date">Tanggal Selesai</label>
+            <input type="date" id="end-date" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reason">Alasan / Keterangan</label>
+          <textarea id="reason" class="form-control" placeholder="Tuliskan keterangan keperluan cuti..." required></textarea>
+        </div>
+
+        <div class="form-group" style="display:flex; align-items:center; gap:8px;">
+          <input type="checkbox" id="needs-replacement" style="width:16px; height:16px; cursor:pointer;">
+          <label for="needs-replacement" style="font-size:13px; font-weight:600; cursor:pointer;">Apakah memerlukan karyawan pengganti tugas (Peer Replacement)?</label>
+        </div>
+
+        <div class="form-group" id="replacement-group" style="display:none;">
+          <label class="form-label" for="replacement-employee">Pilih Karyawan Pengganti</label>
+          <select id="replacement-employee" class="form-control">
+            <option value="">Memuat daftar rekan kerja...</option>
+          </select>
+        </div>
+
+        <div style="margin-top:20px;">
+          <button type="submit" class="btn btn-primary btn-block">Kirim Pengajuan Cuti</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- History Card -->
+    <div class="card">
+      <div class="card-title">Riwayat Pengajuan Cuti / Izin Pribadi</div>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Jenis</th>
+              <th>Periode</th>
+              <th>Keterangan</th>
+              <th>Pengganti</th>
+              <th>Status</th>
+              <th>Diajukan</th>
+            </tr>
+          </thead>
+          <tbody id="leave-history-body">
+            <tr><td colspan="6" style="text-align:center; color:var(--text-muted);">Memuat riwayat pengajuan...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="/pages/dashboard.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon">&#9632;</span>
+      <span>Dashboard</span>
+    </a>
+    <a href="/pages/attendance.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon">&#9679;</span>
+      <span>Presensi</span>
+    </a>
+    <a href="/pages/leave.html" class="bottom-nav-item active">
+      <span class="bottom-nav-icon">&#9650;</span>
+      <span>Cuti</span>
+    </a>
+    <a href="/pages/profile.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon">&#9670;</span>
+      <span>Profil</span>
+    </a>
+  </nav>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/leave.js"></script>
+</body>
+</html>
+

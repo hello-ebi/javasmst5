@@ -1,0 +1,43 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: simponi-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-simponi_db}
+      POSTGRES_USER: ${DB_USER:-simponi_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-simponi_secure_pass_123}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - simponi_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-simponi_user} -d ${DB_NAME:-simponi_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: simponi-app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SERVER_PORT: 8080
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-simponi_db}
+      DB_USER: ${DB_USER:-simponi_user}
+      DB_PASSWORD: ${DB_PASSWORD:-simponi_secure_pass_123}
+    ports:
+      - "${SERVER_PORT:-8080}:8080"
+    profiles:
+      - full-stack
+
+volumes:
+  simponi_pgdata:
+    name: simponi_pgdata

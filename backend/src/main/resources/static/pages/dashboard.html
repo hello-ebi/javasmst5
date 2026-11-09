@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — SIMPONI</title>
+  <link rel="stylesheet" href="/css/style.css">
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="topbar">
+    <div class="brand-wrapper">
+      <span class="brand-title">SIMPONI</span>
+      <span class="brand-subtitle">Sistem Absensi Karyawan</span>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+    <!-- Employee Greeting Card -->
+    <div class="card" style="background-color:#FFFFFF; border-left:4px solid var(--primary-blue);">
+      <h2 style="font-size:18px; color:var(--dark-blue); margin-bottom:4px;">Halo, <span id="dash-emp-name">-</span></h2>
+      <p style="font-size:13px; color:var(--text-muted);">
+        ID Karyawan: <strong id="dash-emp-id">-</strong> &bull; Departemen: <span id="dash-emp-dept">-</span>
+      </p>
+    </div>
+
+    <!-- Today Attendance Card -->
+    <div class="card">
+      <div class="card-title" style="display:flex; justify-content:space-between; align-items:center;">
+        <span>Status Presensi Hari Ini</span>
+        <span id="dash-att-badge" class="badge badge-pending">Memuat...</span>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:16px 0;">
+        <div style="background-color:var(--bg-color); padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border-color);">
+          <span style="font-size:11px; color:var(--text-muted); text-transform:uppercase; font-weight:600;">Presensi Masuk</span>
+          <div id="dash-check-in-time" style="font-size:18px; font-weight:700; color:var(--dark-blue); margin-top:4px;">--:--:--</div>
+          <div id="dash-check-in-dist" style="font-size:11px; color:var(--text-muted);">Jarak: -</div>
+        </div>
+        <div style="background-color:var(--bg-color); padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border-color);">
+          <span style="font-size:11px; color:var(--text-muted); text-transform:uppercase; font-weight:600;">Presensi Pulang</span>
+          <div id="dash-check-out-time" style="font-size:18px; font-weight:700; color:var(--dark-blue); margin-top:4px;">--:--:--</div>
+          <div id="dash-check-out-dist" style="font-size:11px; color:var(--text-muted);">Jarak: -</div>
+        </div>
+      </div>
+      <a href="/pages/attendance.html" class="btn btn-primary btn-block">Buka Menu Presensi GPS</a>
+    </div>
+
+    <!-- Quick Navigation / Shortcuts -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;">
+      <a href="/pages/leave.html" class="btn btn-secondary" style="padding:14px; text-align:center;">
+        Pengajuan Cuti / Izin
+      </a>
+      <a href="/pages/profile.html" class="btn btn-secondary" style="padding:14px; text-align:center;">
+        Pengaturan Profil
+      </a>
+    </div>
+
+    <!-- Recent Leaves Card -->
+    <div class="card">
+      <div class="card-title">Riwayat Pengajuan Cuti Terkini</div>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Jenis</th>
+              <th>Tanggal</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="dash-recent-leaves">
+            <tr><td colspan="3" style="text-align:center; color:var(--text-muted);">Memuat data cuti...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="/pages/dashboard.html" class="bottom-nav-item active">
+      <span class="bottom-nav-icon"><i class="fa-solid fa-house"></i></span>
+      <span>Dashboard</span>
+    </a>
+    <a href="/pages/attendance.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon"><i class="fa-solid fa-calendar-check"></i></span>
+      <span>Presensi</span>
+    </a>
+    <a href="/pages/leave.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon"><i class="fa-solid fa-calendar-day"></i></span>
+      <span>Cuti</span>
+    </a>
+    <a href="/pages/profile.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon"><i class="fa-solid fa-user"></i>
+</span>
+      <span>Profil</span>
+    </a>
+  </nav>
+
+  <script src="/js/api.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = await API.requireAuth('EMPLOYEE');
+      if (!user) return;
+
+      try {
+        const data = await API.get('/api/employee/dashboard');
+        
+        // Populate profile summary
+        document.getElementById('dash-emp-name').textContent = data.employee.fullName;
+        document.getElementById('dash-emp-id').textContent = data.employee.employeeId;
+        document.getElementById('dash-emp-dept').textContent = data.employee.department || 'Umum';
+
+        // Populate today attendance
+        const att = data.todayAttendance;
+        const badge = document.getElementById('dash-att-badge');
+        const inTimeEl = document.getElementById('dash-check-in-time');
+        const inDistEl = document.getElementById('dash-check-in-dist');
+        const outTimeEl = document.getElementById('dash-check-out-time');
+        const outDistEl = document.getElementById('dash-check-out-dist');
+
+        if (!att) {
+          badge.className = 'badge badge-pending';
+          badge.textContent = 'Belum Masuk';
+        } else {
+          if (att.checkInTime) {
+            inTimeEl.textContent = new Date(att.checkInTime).toLocaleTimeString('id-ID', { hour12: false });
+            inDistEl.textContent = `Jarak: ${att.checkInDistance != null ? att.checkInDistance + 'm' : '-'}`;
+          }
+          if (att.checkOutTime) {
+            outTimeEl.textContent = new Date(att.checkOutTime).toLocaleTimeString('id-ID', { hour12: false });
+            outDistEl.textContent = `Jarak: ${att.checkOutDistance != null ? att.checkOutDistance + 'm' : '-'}`;
+            badge.className = 'badge badge-approved';
+            badge.textContent = 'Presensi Selesai';
+          } else {
+            badge.className = 'badge badge-present';
+            badge.textContent = 'Sudah Masuk';
+          }
+        }
+
+        // Populate recent leaves
+        const leavesTable = document.getElementById('dash-recent-leaves');
+        if (data.recentLeaves && data.recentLeaves.length > 0) {
+          leavesTable.innerHTML = data.recentLeaves.map(l => {
+            let bClass = 'badge-pending';
+            if (l.status === 'APPROVED') bClass = 'badge-approved';
+            if (l.status === 'REJECTED') bClass = 'badge-rejected';
+            return `
+              <tr>
+                <td><strong>${l.leaveType}</strong></td>
+                <td>${l.startDate} s/d ${l.endDate}</td>
+                <td><span class="badge ${bClass}">${l.status}</span></td>
+              </tr>
+            `;
+          }).join('');
+        } else {
+          leavesTable.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">Belum ada riwayat cuti.</td></tr>';
+        }
+      } catch (err) {
+        console.error('Failed to load dashboard:', err);
+      }
+    });
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lokasi Kantor — SIMPONI Admin</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="topbar">
+    <div class="brand-wrapper">
+      <span class="brand-title">SIMPONI</span>
+      <span class="brand-subtitle">Employee Attendance System</span>
+      <span class="brand-author">Created by Deddy Harisman</span>
+    </div>
+    <div class="user-badge">
+      <div>
+        <div id="header-user-name" class="user-name">Memuat...</div>
+        <div id="header-user-role" class="user-role">Administrator</div>
+      </div>
+      <button class="btn btn-secondary btn-sm" onclick="API.logout()">Keluar</button>
+    </div>
+  </header>
+
+  <!-- Admin Layout -->
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <ul class="sidebar-nav">
+        <li><a href="/pages/admin-employees.html">Kelola Karyawan</a></li>
+        <li><a href="/pages/admin-leaves.html">Persetujuan Cuti</a></li>
+        <li><a href="/pages/admin-locations.html" class="active">Pengaturan Lokasi Kantor</a></li>
+      </ul>
+    </aside>
+
+    <main class="admin-main">
+      <div style="margin-bottom:20px;">
+        <h2 style="font-size:20px; color:var(--dark-blue); font-weight:700;">Pengaturan Titik Kantor & Geofence Presensi</h2>
+        <p style="font-size:13px; color:var(--text-muted);">
+          Tentukan titik koordinat kantor dan radius toleransi jarak dalam meter untuk validasi presensi GPS karyawan.
+        </p>
+      </div>
+
+      <!-- Location Configuration Form -->
+      <div class="card">
+        <div class="card-title">Formulir Titik Kantor</div>
+
+        <form id="location-form">
+          <input type="hidden" id="loc-id">
+
+          <div class="form-group">
+            <label class="form-label" for="loc-name">Nama Lokasi Kantor</label>
+            <input type="text" id="loc-name" class="form-control" placeholder="Kantor Pusat / Cabang Jakarta" required>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div class="form-group">
+              <label class="form-label" for="loc-latitude">Latitude (WGS 84)</label>
+              <input type="number" step="any" id="loc-latitude" class="form-control" placeholder="-6.2088" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="loc-longitude">Longitude (WGS 84)</label>
+              <input type="number" step="any" id="loc-longitude" class="form-control" placeholder="106.8456" required>
+            </div>
+          </div>
+
+          <div style="margin-bottom:16px;">
+            <button type="button" id="btn-pick-current-gps" class="btn btn-secondary btn-sm">
+              Gunakan Lokasi Saya Saat Ini
+            </button>
+            <span style="font-size:11px; color:var(--text-muted); margin-left:8px;">(Mengisi latitude & longitude dari GPS browser)</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="loc-radius">Radius Toleransi Presensi (Meter)</label>
+            <input type="number" id="loc-radius" class="form-control" placeholder="100" min="10" max="10000" required>
+            <span style="font-size:11px; color:var(--text-muted);">Jarak maksimum dari titik kantor yang diperbolehkan untuk check-in/out.</span>
+          </div>
+
+          <div class="form-group" style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" id="loc-active" checked style="width:16px; height:16px; cursor:pointer;">
+            <label for="loc-active" style="font-size:13px; font-weight:600; cursor:pointer;">Aktifkan sebagai Geofence Utama untuk Presensi</label>
+          </div>
+
+          <div style="margin-top:20px;">
+            <button type="submit" class="btn btn-primary">Simpan Lokasi Kantor</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Locations Table -->
+      <div class="card">
+        <div class="card-title">Daftar Titik Kantor Terdaftar</div>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Nama Kantor</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Radius</th>
+                <th>Status</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="location-table-body">
+              <tr><td colspan="6" style="text-align:center; color:var(--text-muted);">Memuat lokasi kantor...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>
+

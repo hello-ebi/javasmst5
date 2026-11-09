@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presensi GPS — SIMPONI</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="topbar">
+    <div class="brand-wrapper">
+      <span class="brand-title">SIMPONI</span>
+      <span class="brand-subtitle">Employee Attendance System</span>
+      <span class="brand-author">Created by Deddy Harisman</span>
+    </div>
+    <div class="user-badge">
+      <div>
+        <div id="header-user-name" class="user-name">Memuat...</div>
+        <div id="header-user-role" class="user-role">Karyawan</div>
+      </div>
+      <button class="btn btn-secondary btn-sm" onclick="API.logout()">Keluar</button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+    <!-- Clock & Live Time Card -->
+    <div class="card" style="text-align:center;">
+      <div id="live-date" style="font-size:14px; color:var(--text-muted); font-weight:600;">Memuat tanggal...</div>
+      <div id="live-clock" class="clock-display">00:00:00</div>
+      <div style="margin-top:4px;">
+        <span id="today-status-badge" class="badge badge-pending">Memeriksa status...</span>
+      </div>
+    </div>
+
+    <!-- GPS & Action Card -->
+    <div class="card">
+      <div class="card-title">Pencatatan Presensi Lokasi GPS</div>
+
+      <div class="geo-status-box">
+        <div style="font-weight:600;" id="geo-status">Menginisialisasi sensor GPS...</div>
+        <div id="geo-coordinates" style="font-family:monospace; font-size:12px;">Lat: -, Lng: -</div>
+        <div id="office-info" style="color:var(--primary-blue); font-weight:500; margin-top:2px;">Memuat data geofence kantor...</div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+        <button id="btn-check-in" class="btn btn-primary" style="padding:14px;" disabled>
+          Presensi Masuk
+        </button>
+        <button id="btn-check-out" class="btn btn-secondary" style="padding:14px;" disabled>
+          Presensi Pulang
+        </button>
+      </div>
+
+      <div style="margin-top:12px; font-size:11px; color:var(--text-muted); text-align:center;">
+        * Presensi divalidasi langsung di server menggunakan rumus Haversine berdasarkan koordinat kantor resmi.
+      </div>
+    </div>
+
+    <!-- Attendance History Card -->
+    <div class="card">
+      <div class="card-title">Riwayat Presensi Pribadi</div>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Tanggal</th>
+              <th>Presensi Masuk</th>
+              <th>Presensi Pulang</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="attendance-history-body">
+            <tr><td colspan="4" style="text-align:center; color:var(--text-muted);">Memuat riwayat presensi...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="/pages/dashboard.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon">&#9632;</span>
+      <span>Dashboard</span>
+    </a>
+    <a href="/pages/attendance.html" class="bottom-nav-item active">
+      <span class="bottom-nav-icon">&#9679;</span>
+      <span>Presensi</span>
+    </a>
+    <a href="/pages/leave.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon">&#9650;</span>
+      <span>Cuti</span>
+    </a>
+    <a href="/pages/profile.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon">&#9670;</span>
+      <span>Profil</span>
+    </a>
+  </nav>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/attendance.js"></script>
+</body>
+</html>
+

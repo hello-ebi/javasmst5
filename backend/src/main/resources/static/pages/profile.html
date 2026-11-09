@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil Saya - SIMPONI</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="topbar">
+    <div class="brand-wrapper">
+      <span class="brand-title">SIMPONI</span>
+      <span class="brand-subtitle">Sistem Absensi Karyawan</span>
+      <span class="brand-author">Created by Deddy Harisman</span>
+    </div>
+    <div class="user-badge">
+      <div>
+        <div id="header-user-name" class="user-name">Memuat...</div>
+        <div id="header-user-role" class="user-role">Karyawan</div>
+      </div>
+      <button class="btn btn-secondary btn-sm" onclick="API.logout()">Keluar</button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+    <!-- Employee Identity Card -->
+    <div class="card">
+      <div class="card-title">Kartu Identitas Karyawan</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:13px;">
+        <div>
+          <span style="color:var(--text-muted); font-size:11px; text-transform:uppercase;">Nama Lengkap</span>
+          <div id="prof-name" style="font-weight:600; font-size:15px; color:var(--dark-blue);">-</div>
+        </div>
+        <div>
+          <span style="color:var(--text-muted); font-size:11px; text-transform:uppercase;">ID Karyawan</span>
+          <div id="prof-id" style="font-weight:600; font-size:15px; color:var(--dark-blue);">-</div>
+        </div>
+        <div>
+          <span style="color:var(--text-muted); font-size:11px; text-transform:uppercase;">Email Terdaftar</span>
+          <div id="prof-email" style="font-weight:600;">-</div>
+        </div>
+        <div>
+          <span style="color:var(--text-muted); font-size:11px; text-transform:uppercase;">Nomor Telepon</span>
+          <div id="prof-phone" style="font-weight:600;">-</div>
+        </div>
+        <div>
+          <span style="color:var(--text-muted); font-size:11px; text-transform:uppercase;">Departemen</span>
+          <div id="prof-dept" style="font-weight:600;">-</div>
+        </div>
+        <div>
+          <span style="color:var(--text-muted); font-size:11px; text-transform:uppercase;">Jabatan / Posisi</span>
+          <div id="prof-pos" style="font-weight:600;">-</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Security & Account Settings Grid -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
+      <!-- Change Email Card -->
+      <div class="card">
+        <div class="card-title">Ubah Alamat Email</div>
+        <form id="change-email-form">
+          <div class="form-group">
+            <label class="form-label" for="new-email">Email Baru</label>
+            <input type="email" id="new-email" class="form-control" required placeholder="email.baru@simponi.local">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email-cur-pass">Kata Sandi Saat Ini</label>
+            <input type="password" id="email-cur-pass" class="form-control" required placeholder="••••••••">
+          </div>
+          <button type="submit" class="btn btn-secondary btn-block">Perbarui Email</button>
+        </form>
+      </div>
+
+      <!-- Change Password Card -->
+      <div class="card">
+        <div class="card-title">Ubah Kata Sandi</div>
+        <form id="change-pass-form">
+          <div class="form-group">
+            <label class="form-label" for="pass-cur">Kata Sandi Saat Ini</label>
+            <input type="password" id="pass-cur" class="form-control" required placeholder="••••••••">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="pass-new">Kata Sandi Baru</label>
+            <input type="password" id="pass-new" class="form-control" required minlength="6" placeholder="Minimal 6 karakter">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="pass-confirm">Konfirmasi Kata Sandi Baru</label>
+            <input type="password" id="pass-confirm" class="form-control" required minlength="6" placeholder="Ulangi kata sandi baru">
+          </div>
+          <button type="submit" class="btn btn-secondary btn-block">Simpan Kata Sandi</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="/pages/dashboard.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon">&#9632;</span>
+      <span>Dashboard</span>
+    </a>
+    <a href="/pages/attendance.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon">&#9679;</span>
+      <span>Presensi</span>
+    </a>
+    <a href="/pages/leave.html" class="bottom-nav-item">
+      <span class="bottom-nav-icon">&#9650;</span>
+      <span>Cuti</span>
+    </a>
+    <a href="/pages/profile.html" class="bottom-nav-item active">
+      <span class="bottom-nav-icon">&#9670;</span>
+      <span>Profil</span>
+    </a>
+  </nav>
+
+  <script src="/js/api.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = await API.requireAuth();
+      if (!user) return;
+
+      loadProfile();
+
+      // Email update form
+      document.getElementById('change-email-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('new-email').value.trim();
+        const currentPassword = document.getElementById('email-cur-pass').value;
+
+        try {
+          const res = await API.put('/api/employee/profile/email', { email, currentPassword });
+          alert(res.message || 'Email berhasil diperbarui.');
+          e.target.reset();
+          loadProfile();
+        } catch (err) {
+          alert(`Gagal memperbarui email:\n${err.message}`);
+        }
+      });
+
+      // Password update form
+      document.getElementById('change-pass-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const currentPassword = document.getElementById('pass-cur').value;
+        const newPassword = document.getElementById('pass-new').value;
+        const confirmPassword = document.getElementById('pass-confirm').value;
+
+        if (newPassword !== confirmPassword) {
+          alert('Konfirmasi kata sandi baru tidak cocok.');
+          return;
+        }
+
+        try {
+          const res = await API.put('/api/employee/profile/password', { currentPassword, newPassword });
+          alert(res.message || 'Kata sandi berhasil diubah.');
+          e.target.reset();
+        } catch (err) {
+          alert(`Gagal mengubah kata sandi:\n${err.message}`);
+        }
+      });
+    });
+
+    async function loadProfile() {
+      try {
+        const emp = await API.get('/api/employee/profile');
+        document.getElementById('prof-name').textContent = emp.fullName;
+        document.getElementById('prof-id').textContent = emp.employeeId;
+        document.getElementById('prof-email').textContent = emp.email;
+        document.getElementById('prof-phone').textContent = emp.phone || '-';
+        document.getElementById('prof-dept').textContent = emp.department || '-';
+        document.getElementById('prof-pos').textContent = emp.position || '-';
+      } catch (err) {
+        console.error('Failed to load profile:', err);
+      }
+    }
+  </script>
+</body>
+</html>
+

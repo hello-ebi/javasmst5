@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Persetujuan Cuti — SIMPONI Admin</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="topbar">
+    <div class="brand-wrapper">
+      <span class="brand-title">SIMPONI</span>
+      <span class="brand-subtitle">Employee Attendance System</span>
+      <span class="brand-author">Created by Deddy Harisman</span>
+    </div>
+    <div class="user-badge">
+      <div>
+        <div id="header-user-name" class="user-name">Memuat...</div>
+        <div id="header-user-role" class="user-role">Administrator</div>
+      </div>
+      <button class="btn btn-secondary btn-sm" onclick="API.logout()">Keluar</button>
+    </div>
+  </header>
+
+  <!-- Admin Layout -->
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <ul class="sidebar-nav">
+        <li><a href="/pages/admin-employees.html">Kelola Karyawan</a></li>
+        <li><a href="/pages/admin-leaves.html" class="active">Persetujuan Cuti</a></li>
+        <li><a href="/pages/admin-locations.html">Pengaturan Lokasi Kantor</a></li>
+      </ul>
+    </aside>
+
+    <main class="admin-main">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
+        <div>
+          <h2 style="font-size:20px; color:var(--dark-blue); font-weight:700;">Persetujuan Cuti & Izin</h2>
+          <p style="font-size:13px; color:var(--text-muted);">Tinjau dan proses permohonan cuti seluruh karyawan.</p>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <label for="filter-leave-status" style="font-size:13px; font-weight:600;">Filter Status:</label>
+          <select id="filter-leave-status" class="form-control" style="width:160px;">
+            <option value="ALL">Semua Pengajuan</option>
+            <option value="PENDING" selected>Menunggu Persetujuan</option>
+            <option value="APPROVED">Disetujui</option>
+            <option value="REJECTED">Ditolak</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Karyawan</th>
+                <th>Jenis</th>
+                <th>Periode</th>
+                <th>Keterangan</th>
+                <th>Pengganti</th>
+                <th>Status</th>
+                <th>Tindakan</th>
+              </tr>
+            </thead>
+            <tbody id="admin-leave-table-body">
+              <tr><td colspan="7" style="text-align:center; color:var(--text-muted);">Memuat daftar permohonan cuti...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>
+

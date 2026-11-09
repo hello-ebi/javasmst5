@@ -1,0 +1,13 @@
+#!/bin/sh
+# Maven Wrapper Script for Linux/macOS
+# SIMPONI Attendance System
+# Created by Deddy Harisman
+
+if command -v mvn >/dev/null 2>&1; then
+    exec mvn "$@"
+else
+    echo "[SIMPONI] Apache Maven is not detected in system PATH."
+    echo "[SIMPONI] Please install Apache Maven ('brew install maven' or 'apt install maven') or run via Docker."
+    exit 1
+fi
+

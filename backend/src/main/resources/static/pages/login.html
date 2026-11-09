@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIMPONI - Sistem Absensi Karyawan</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body style="display:flex; align-items:center; justify-content:center; min-height:100vh; padding:16px;">
+
+  <div style="width:100%; max-width:400px;">
+    <div class="card" style="padding:28px 24px;">
+      <div style="text-align:center; margin-bottom:24px;">
+        <h1 class="brand-title" style="font-size:24px; color:var(--dark-blue); margin-bottom:4px;">SIMPONI</h1>
+        <p class="brand-subtitle" style="font-size:13px; color:var(--text-muted); margin-bottom:6px;">Sistem Absensi Karyawan</p>
+      </div>
+
+      <div id="login-alert" class="alert alert-danger" style="display:none;"></div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label class="form-label" for="email">Alamat Email</label>
+          <input type="email" id="email" class="form-control" placeholder="nama@simponi.local" required autocomplete="username">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Kata Sandi</label>
+          <input type="password" id="password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+
+        <div style="margin-top:20px;">
+          <button type="submit" class="btn btn-primary btn-block">Masuk ke SIMPONI</button>
+        </div>
+      </form>
+
+      <!-- <div style="margin-top:24px; padding-top:16px; border-top:1px solid var(--border-color); font-size:12px; color:var(--text-muted); text-align:center;"> -->
+        <!-- <p><strong>Akun Uji Coba:</strong></p> -->
+        <!-- <p>Admin: <code>admin@simponi.local</code> / <code>AdminPass123!</code></p> -->
+        <!-- <p>Karyawan: <code>employee@simponi.local</code> / <code>UserPass123!</code></p> -->
+      <!-- </div> -->
+    </div>
+    <footer class="login-footer">
+  Dibuat oleh <strong>Dedy Harisman</strong>
+</footer>
+  </div>
+
+  
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>
+

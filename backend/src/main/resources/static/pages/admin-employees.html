@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kelola Karyawan — SIMPONI Admin</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="topbar">
+    <div class="brand-wrapper">
+      <span class="brand-title">SIMPONI</span>
+      <span class="brand-subtitle">Employee Attendance System</span>
+      <span class="brand-author">Created by Deddy Harisman</span>
+    </div>
+    <div class="user-badge">
+      <div>
+        <div id="header-user-name" class="user-name">Memuat...</div>
+        <div id="header-user-role" class="user-role">Administrator</div>
+      </div>
+      <button class="btn btn-secondary btn-sm" onclick="API.logout()">Keluar</button>
+    </div>
+  </header>
+
+  <!-- Admin Layout: Sidebar + Main Content -->
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <ul class="sidebar-nav">
+        <li><a href="/pages/admin-employees.html" class="active">Kelola Karyawan</a></li>
+        <li><a href="/pages/admin-leaves.html">Persetujuan Cuti</a></li>
+        <li><a href="/pages/admin-locations.html">Pengaturan Lokasi Kantor</a></li>
+      </ul>
+    </aside>
+
+    <main class="admin-main">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
+        <div>
+          <h2 style="font-size:20px; color:var(--dark-blue); font-weight:700;">Manajemen Karyawan</h2>
+          <p style="font-size:13px; color:var(--text-muted);">Kelola data akun, role, dan profil karyawan SIMPONI.</p>
+        </div>
+        <button id="btn-add-employee" class="btn btn-primary">+ Tambah Karyawan</button>
+      </div>
+
+      <div class="card">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>ID Karyawan</th>
+                <th>Nama Lengkap</th>
+                <th>Email Akun</th>
+                <th>Departemen / Jabatan</th>
+                <th>Role & Status</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="employee-table-body">
+              <tr><td colspan="6" style="text-align:center; color:var(--text-muted);">Memuat data karyawan...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Employee Modal Dialog -->
+  <div id="employee-modal" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modal-title" class="modal-title">Tambah Karyawan Baru</h3>
+        <button id="modal-close-btn" style="background:none; border:none; font-size:20px; cursor:pointer;">&times;</button>
+      </div>
+      <form id="employee-form">
+        <div class="modal-body">
+          <input type="hidden" id="emp-modal-id">
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div class="form-group">
+              <label class="form-label" for="emp-code">Kode Karyawan</label>
+              <input type="text" id="emp-code" class="form-control" placeholder="EMP-003" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="emp-role">Hak Akses (Role)</label>
+              <select id="emp-role" class="form-control" required>
+                <option value="EMPLOYEE">EMPLOYEE</option>
+                <option value="ADMIN">ADMIN</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="emp-fullname">Nama Lengkap</label>
+            <input type="text" id="emp-fullname" class="form-control" placeholder="Nama Lengkap Karyawan" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="emp-email">Alamat Email</label>
+            <input type="email" id="emp-email" class="form-control" placeholder="nama@simponi.local" required>
+          </div>
+
+          <div class="form-group" id="emp-password-group">
+            <label class="form-label" for="emp-password">Kata Sandi</label>
+            <input type="password" id="emp-password" class="form-control" placeholder="••••••••">
+            <span id="emp-password-help" style="font-size:11px; color:var(--text-muted);"></span>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div class="form-group">
+              <label class="form-label" for="emp-dept">Departemen</label>
+              <input type="text" id="emp-dept" class="form-control" placeholder="Teknologi Informasi">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="emp-position">Jabatan</label>
+              <input type="text" id="emp-position" class="form-control" placeholder="Software Engineer">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="emp-phone">Nomor Telepon</label>
+            <input type="text" id="emp-phone" class="form-control" placeholder="081234567890">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="modal-cancel-btn" class="btn btn-secondary">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan Karyawan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>
+
